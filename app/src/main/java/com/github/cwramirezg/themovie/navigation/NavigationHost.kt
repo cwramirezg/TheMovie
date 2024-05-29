@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.github.cwramirezg.themovie.authentication.presentation.login.LoginScreen
+import com.github.cwramirezg.themovie.home.presentation.home.HomeScreen
 
 @Composable
 fun NavigationHost(
@@ -16,7 +17,14 @@ fun NavigationHost(
         startDestination = startDestination.route
     ) {
         composable(route = NavigationRoute.Login.route) {
-            LoginScreen()
+            LoginScreen(
+                onLoginSuccess = {
+                    navHostController.navigate(NavigationRoute.Home.route)
+                }
+            )
+        }
+        composable(route = NavigationRoute.Home.route) {
+            HomeScreen()
         }
     }
 }
