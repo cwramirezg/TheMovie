@@ -5,7 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.github.cwramirezg.themovie.authentication.presentation.login.LoginScreen
-import com.github.cwramirezg.themovie.home.presentation.home.HomeScreen
+import com.github.cwramirezg.themovie.home.presentation.video.VideoScreen
 
 @Composable
 fun NavigationHost(
@@ -24,7 +24,9 @@ fun NavigationHost(
             )
         }
         composable(route = NavigationRoute.Home.route) {
-            HomeScreen()
+            VideoScreen(
+                onclickVideo = { }
+            )
         }
     }
 }
