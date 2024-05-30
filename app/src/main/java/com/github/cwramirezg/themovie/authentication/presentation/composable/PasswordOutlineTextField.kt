@@ -29,8 +29,10 @@ fun PasswordOutlineTextField(
     OutlinedTextField(
         value = value,
         onValueChange = {
-            if (passwordPattern.matcher(it).matches()) {
-                onValueChange(it)
+            when {
+                it.isEmpty() -> onValueChange(it)
+                passwordPattern.matcher(it).matches() -> onValueChange(it)
+                else -> return@OutlinedTextField
             }
         },
         label = { Text(text = "Password") },

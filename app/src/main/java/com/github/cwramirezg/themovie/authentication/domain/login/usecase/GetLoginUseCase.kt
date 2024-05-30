@@ -5,6 +5,6 @@ import com.github.cwramirezg.themovie.authentication.domain.repository.LoginRepo
 class GetLoginUseCase(
     private val repository: LoginRepository
 ) {
-    operator fun invoke(username: String, password: String): Boolean =
+    suspend operator fun invoke(username: String, password: String): Boolean =
         repository.login(username, password)
 }

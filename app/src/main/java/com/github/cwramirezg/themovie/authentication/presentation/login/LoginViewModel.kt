@@ -3,7 +3,9 @@ package com.github.cwramirezg.themovie.authentication.presentation.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.cwramirezg.themovie.authentication.domain.login.usecase.LoginUseCases
+import com.github.cwramirezg.themovie.core.di.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUseCases: LoginUseCases
+    private val loginUseCases: LoginUseCases,
+    @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(LoginState())
@@ -27,7 +30,7 @@ class LoginViewModel @Inject constructor(
                     isLoading = true,
                     error = ""
                 )
-                viewModelScope.launch(Dispatchers.IO) {
+                viewModelScope.launch(dispatcher) {
                     val result =
                         loginUseCases.getLoginUseCase(state.value.username, state.value.password)
                     if (result) {
