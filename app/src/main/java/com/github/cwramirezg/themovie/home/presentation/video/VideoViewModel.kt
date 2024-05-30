@@ -2,12 +2,17 @@ package com.github.cwramirezg.themovie.home.presentation.video
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.github.cwramirezg.themovie.core.di.IoDispatcher
+import com.github.cwramirezg.themovie.home.domain.model.Video
 import com.github.cwramirezg.themovie.home.domain.video.usecase.VideoUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -22,13 +27,12 @@ class VideoViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
-        getVideos()
+        //  getVideos()
     }
 
     private fun getVideos() {
         viewModelScope.launch(dispatcher) {
             _state.value = VideoState(loading = true)
-            Thread.sleep(2000)
             videoUseCases.requestVideos()
                 .onSuccess {
                     videoUseCases.getVideos().collect {
@@ -41,4 +45,9 @@ class VideoViewModel @Inject constructor(
                 }
         }
     }
+
+    fun getVideo(): Flow<PagingData<Video>> =
+        videoUseCases.getVideosByPage()
+            .cachedIn(viewModelScope)
+
 }

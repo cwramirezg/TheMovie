@@ -20,6 +20,21 @@ fun VideoResponse.toDomain(): List<Video> {
     return this.results.map { it.toDomain() }
 }
 
+fun Result.toLocal(): VideoEntity {
+    return VideoEntity(
+        id = id.toString(),
+        poster = poster_path,
+        nombre = title,
+        nota = vote_average.toString(),
+        fechaLanzamiento = release_date,
+        resumen = overview,
+    )
+}
+
+fun VideoResponse.toLocal(): List<VideoEntity> {
+    return this.results.map { it.toLocal() }
+}
+
 fun VideoEntity.toDomain(): Video {
     return Video(
         id = id,

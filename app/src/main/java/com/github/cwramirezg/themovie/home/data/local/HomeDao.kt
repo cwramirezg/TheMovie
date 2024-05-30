@@ -18,6 +18,9 @@ interface HomeDao {
     @Query("SELECT * FROM VideoEntity")
     fun getAllVideos(): Flow<List<VideoEntity>>
 
+    @Query("SELECT * FROM VideoEntity")
+    fun getVideos(): List<VideoEntity>
+
     @Query("SELECT COUNT(*) FROM VideoEntity")
     fun countVideos(): Int
 

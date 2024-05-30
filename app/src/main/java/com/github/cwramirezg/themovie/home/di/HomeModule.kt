@@ -1,12 +1,14 @@
 package com.github.cwramirezg.themovie.home.di
 
 import android.content.Context
+import android.net.ConnectivityManager
 import androidx.room.Room
 import com.github.cwramirezg.themovie.home.data.local.HomeDao
 import com.github.cwramirezg.themovie.home.data.local.HomeDatabase
 import com.github.cwramirezg.themovie.home.data.remote.HomeApi
 import com.github.cwramirezg.themovie.home.data.repository.HomeRepositoryImpl
 import com.github.cwramirezg.themovie.home.domain.repository.HomeRepository
+import com.github.cwramirezg.themovie.home.domain.video.usecase.GetVideosByPage
 import com.github.cwramirezg.themovie.home.domain.video.usecase.GetVideosUseCase
 import com.github.cwramirezg.themovie.home.domain.video.usecase.RequestVideosUseCase
 import com.github.cwramirezg.themovie.home.domain.video.usecase.VideoUseCases
@@ -30,7 +32,8 @@ object HomeModule {
     fun provideVideoUseCase(repository: HomeRepository): VideoUseCases {
         return VideoUseCases(
             getVideos = GetVideosUseCase(repository),
-            requestVideos = RequestVideosUseCase(repository)
+            requestVideos = RequestVideosUseCase(repository),
+            getVideosByPage = GetVideosByPage(repository)
         )
     }
 
@@ -70,9 +73,20 @@ object HomeModule {
     @Provides
     fun provideHomeRepository(
         dao: HomeDao,
-        api: HomeApi
+        api: HomeApi,
+        connectivityManager: ConnectivityManager
     ): HomeRepository {
-        return HomeRepositoryImpl(dao = dao, api = api)
+        return HomeRepositoryImpl(
+            dao = dao,
+            api = api,
+            connectivityManager = connectivityManager
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideConnectivityManager(@ApplicationContext context: Context): ConnectivityManager {
+        return context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 
 }
