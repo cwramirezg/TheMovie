@@ -19,8 +19,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -37,7 +35,7 @@ import coil.request.ImageRequest
 import com.github.cwramirezg.misrecetas.home.ui.components.TopAppBarView
 import com.github.cwramirezg.themovie.R
 import com.github.cwramirezg.themovie.home.domain.model.Video
-import com.github.cwramirezg.themovie.home.domain.model.url
+import com.github.cwramirezg.themovie.home.domain.model.url200
 import timber.log.Timber
 
 @Composable
@@ -45,92 +43,90 @@ fun VideoScreen(
     viewModel: VideoViewModel = hiltViewModel(),
     onclickVideo: (String) -> Unit
 ) {
-    val state by viewModel.state.collectAsState()
     val videos = viewModel.getVideo().collectAsLazyPagingItems()
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Scaffold(
-            topBar = {
-                TopAppBarView(
-                    textTitle = "Videos",
-                    onClickVideo = { },
-                    imageVectorVideo = Icons.Default.Home
-                )
-            }
-        ) { padding ->
-            LazyVerticalGrid(
-                columns = GridCells.Adaptive(180.dp),
-                modifier = Modifier
-                    .padding(padding)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-                contentPadding = PaddingValues(4.dp)
-            ) {
-                items(videos.itemCount) { index ->
-                    val video = videos[index] ?: return@items
+    Timber.d("Videosscreen")
+
+    Scaffold(
+        topBar = {
+            TopAppBarView(
+                textTitle = "Videos",
+                onClickHome = { },
+                imageVectorHome = Icons.Default.Home
+            )
+        }
+    ) { padding ->
+        Timber.d("Videos: ${videos.itemCount}")
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(180.dp),
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+            contentPadding = PaddingValues(4.dp)
+        ) {
+            items(videos.itemCount) { index ->
+                videos[index]?.also {
                     VideoItem(
-                        video = video,
+                        video = it,
                         onClick = {
                             onclickVideo(it)
                         }
                     )
                 }
-                when (val state = videos.loadState.refresh) {
-                    is LoadState.Error -> {
-                        Timber.d("Error refresh")
-                        item {
-                            Text(text = state.error.message.toString())
-                        }
+            }
+            when (val state = videos.loadState.refresh) {
+                is LoadState.Error -> {
+                    Timber.d("Error refresh")
+                    item {
+                        Text(text = state.error.message.toString())
                     }
-
-                    LoadState.Loading -> {
-                        item {
-                            Column(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center,
-                            ) {
-                                Text(
-                                    modifier = Modifier
-                                        .padding(8.dp),
-                                    text = "Refresh Loading"
-                                )
-                                CircularProgressIndicator()
-                            }
-                        }
-                    }
-
-                    is LoadState.NotLoading -> {}
                 }
-                when (val state = videos.loadState.append) {
-                    is LoadState.Error -> {
-                        Timber.d("Error append")
-                        item {
-                            Text(text = state.error.message.toString())
-                        }
-                    }
 
-                    LoadState.Loading -> {
-                        item {
-                            Column(
+                LoadState.Loading -> {
+                    item {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center,
+                        ) {
+                            Text(
                                 modifier = Modifier
-                                    .fillMaxWidth(),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center,
-                            ) {
-                                Text(text = "Pagination Loading")
-
-                                CircularProgressIndicator()
-                            }
+                                    .padding(8.dp),
+                                text = "Refresh Loading"
+                            )
+                            CircularProgressIndicator()
                         }
                     }
-
-                    is LoadState.NotLoading -> {}
                 }
+
+                is LoadState.NotLoading -> {}
+            }
+            when (val state = videos.loadState.append) {
+                is LoadState.Error -> {
+                    Timber.d("Error append")
+                    item {
+                        Text(text = state.error.message.toString())
+                    }
+                }
+
+                LoadState.Loading -> {
+                    item {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center,
+                        ) {
+                            Text(text = "Pagination Loading")
+
+                            CircularProgressIndicator()
+                        }
+                    }
+                }
+
+                is LoadState.NotLoading -> {}
             }
         }
     }
@@ -146,7 +142,7 @@ fun VideoItem(video: Video, onClick: (String) -> Unit) {
         Box {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(video.poster.url())
+                    .data(video.poster.url200())
                     .diskCachePolicy(CachePolicy.ENABLED)
                     .build(),
                 error = painterResource(id = R.drawable.broken_image),

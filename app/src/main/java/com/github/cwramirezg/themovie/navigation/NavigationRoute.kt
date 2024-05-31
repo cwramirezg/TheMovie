@@ -4,6 +4,6 @@ sealed class NavigationRoute(
     val route: String
 ) {
     object Login : NavigationRoute("login")
-    object Home : NavigationRoute("home")
-    object Profile : NavigationRoute("profile")
+    object Video : NavigationRoute("video")
+    object Detail : NavigationRoute("detail")
 }

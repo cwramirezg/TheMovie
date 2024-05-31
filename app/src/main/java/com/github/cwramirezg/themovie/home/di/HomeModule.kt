@@ -7,6 +7,8 @@ import com.github.cwramirezg.themovie.home.data.local.HomeDao
 import com.github.cwramirezg.themovie.home.data.local.HomeDatabase
 import com.github.cwramirezg.themovie.home.data.remote.HomeApi
 import com.github.cwramirezg.themovie.home.data.repository.HomeRepositoryImpl
+import com.github.cwramirezg.themovie.home.domain.detail.usecase.DetailUseCases
+import com.github.cwramirezg.themovie.home.domain.detail.usecase.GetVideoByIdUseCase
 import com.github.cwramirezg.themovie.home.domain.repository.HomeRepository
 import com.github.cwramirezg.themovie.home.domain.video.usecase.GetVideosByPage
 import com.github.cwramirezg.themovie.home.domain.video.usecase.GetVideosUseCase
@@ -29,11 +31,19 @@ object HomeModule {
 
     @Singleton
     @Provides
-    fun provideVideoUseCase(repository: HomeRepository): VideoUseCases {
+    fun provideVideoUseCases(repository: HomeRepository): VideoUseCases {
         return VideoUseCases(
             getVideos = GetVideosUseCase(repository),
             requestVideos = RequestVideosUseCase(repository),
             getVideosByPage = GetVideosByPage(repository)
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideDetailUseCases(repository: HomeRepository): DetailUseCases {
+        return DetailUseCases(
+            getVideoByIdUseCase = GetVideoByIdUseCase(repository)
         )
     }
 

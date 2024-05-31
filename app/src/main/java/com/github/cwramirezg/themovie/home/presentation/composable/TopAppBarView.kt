@@ -18,8 +18,8 @@ import androidx.compose.ui.tooling.preview.Preview
 @Composable
 fun TopAppBarView(
     textTitle: String,
-    onClickVideo: () -> Unit,
-    imageVectorVideo: ImageVector
+    onClickHome: () -> Unit,
+    imageVectorHome: ImageVector
 ) {
     CenterAlignedTopAppBar(
         title = {
@@ -29,9 +29,9 @@ fun TopAppBarView(
             )
         },
         navigationIcon = {
-            IconButton(onClick = { onClickVideo() }) {
+            IconButton(onClick = { onClickHome() }) {
                 Icon(
-                    imageVector = imageVectorVideo,
+                    imageVector = imageVectorHome,
                     contentDescription = "Icon navigation",
                     tint = Color.White
                 )
@@ -48,7 +48,7 @@ fun TopAppBarView(
 fun TopAppBarViewPreview() {
     TopAppBarView(
         textTitle = "Mis Videos",
-        onClickVideo = {},
-        imageVectorVideo = Icons.Default.Home
+        onClickHome = {},
+        imageVectorHome = Icons.Default.Home
     )
 }

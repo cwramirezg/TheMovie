@@ -13,6 +13,7 @@ import com.github.cwramirezg.themovie.home.domain.model.Video
 import com.github.cwramirezg.themovie.home.domain.repository.HomeRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 
 class HomeRepositoryImpl(
     private val dao: HomeDao,
@@ -40,6 +41,7 @@ class HomeRepositoryImpl(
     }
 
     override fun getVideosByPage(): Flow<PagingData<Video>> {
+        Timber.d("getVideosByPage")
         return Pager(
             config = PagingConfig(pageSize = 20),
             pagingSourceFactory = { VideosPagingSource(dao, api, isNetworkAvailable()) }

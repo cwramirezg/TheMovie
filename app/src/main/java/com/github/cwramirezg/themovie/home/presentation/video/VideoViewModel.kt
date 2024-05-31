@@ -10,10 +10,7 @@ import com.github.cwramirezg.themovie.home.domain.video.usecase.VideoUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -23,31 +20,15 @@ class VideoViewModel @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(VideoState())
-    val state = _state.asStateFlow()
-
     init {
-        //  getVideos()
+        Timber.d("VideoViewModel created!")
     }
 
-    private fun getVideos() {
-        viewModelScope.launch(dispatcher) {
-            _state.value = VideoState(loading = true)
-            videoUseCases.requestVideos()
-                .onSuccess {
-                    videoUseCases.getVideos().collect {
-                        _state.value = VideoState(videos = it)
-                    }
-                }
-                .onFailure {
-                    Timber.d("Error: ${it.message}")
-                    _state.value = VideoState(error = it.message)
-                }
-        }
-    }
-
-    fun getVideo(): Flow<PagingData<Video>> =
-        videoUseCases.getVideosByPage()
+    fun getVideo(): Flow<PagingData<Video>> {
+        Timber.d("getVideo")
+        return videoUseCases
+            .getVideosByPage()
+            .flowOn(dispatcher)
             .cachedIn(viewModelScope)
-
+    }
 }
