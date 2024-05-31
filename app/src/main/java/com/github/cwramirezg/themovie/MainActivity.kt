@@ -5,8 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
+import com.github.cwramirezg.themovie.navigation.Login
 import com.github.cwramirezg.themovie.navigation.NavigationHost
-import com.github.cwramirezg.themovie.navigation.NavigationRoute
 import com.github.cwramirezg.themovie.ui.theme.TheMovieTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun getStartDestination(): NavigationRoute {
-        return NavigationRoute.Login
+    private fun getStartDestination(): Any {
+        return Login
     }
 }

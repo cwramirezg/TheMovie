@@ -14,15 +14,18 @@ import com.github.cwramirezg.themovie.home.domain.video.usecase.GetVideosByPage
 import com.github.cwramirezg.themovie.home.domain.video.usecase.GetVideosUseCase
 import com.github.cwramirezg.themovie.home.domain.video.usecase.RequestVideosUseCase
 import com.github.cwramirezg.themovie.home.domain.video.usecase.VideoUseCases
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Converter
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -49,6 +52,17 @@ object HomeModule {
 
     @Singleton
     @Provides
+    fun provideFactory(): Converter.Factory {
+        val contentType = "application/json".toMediaType()
+        val json = Json {
+            ignoreUnknownKeys = true
+            coerceInputValues = true
+        }
+        return json.asConverterFactory(contentType)
+    }
+
+    @Singleton
+    @Provides
     fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder().addInterceptor(
             HttpLoggingInterceptor().apply {
@@ -59,12 +73,12 @@ object HomeModule {
 
     @Singleton
     @Provides
-    fun provideHomeApi(cliente: OkHttpClient): HomeApi {
+    fun provideHomeApi(cliente: OkHttpClient, factory: Converter.Factory): HomeApi {
         return Retrofit
             .Builder()
             .baseUrl(HomeApi.BASE_URL)
             .client(cliente)
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(factory)
             .build()
             .create(HomeApi::class.java)
     }

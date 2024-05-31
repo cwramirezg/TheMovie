@@ -3,8 +3,10 @@ package com.github.cwramirezg.themovie.home.presentation.detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.github.cwramirezg.themovie.core.di.IoDispatcher
 import com.github.cwramirezg.themovie.home.domain.detail.usecase.DetailUseCases
+import com.github.cwramirezg.themovie.navigation.Detail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     private val detailUseCases: DetailUseCases,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
@@ -23,10 +25,10 @@ class DetailViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
-        val id = savedStateHandle.get<String>("id") ?: ""
-        if (id.isNotEmpty()) {
+        val detail = savedStateHandle.toRoute<Detail>()
+        if (detail.id.isNotEmpty()) {
             viewModelScope.launch(dispatcher) {
-                val video = detailUseCases.getVideoByIdUseCase(id)
+                val video = detailUseCases.getVideoByIdUseCase(detail.id)
                 _state.value = _state.value.copy(video = video)
             }
         }

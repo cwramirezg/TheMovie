@@ -2,10 +2,8 @@ package com.github.cwramirezg.themovie.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import com.github.cwramirezg.themovie.authentication.presentation.login.LoginScreen
 import com.github.cwramirezg.themovie.home.presentation.detail.DetailScreen
 import com.github.cwramirezg.themovie.home.presentation.video.VideoScreen
@@ -13,36 +11,27 @@ import com.github.cwramirezg.themovie.home.presentation.video.VideoScreen
 @Composable
 fun NavigationHost(
     navHostController: NavHostController,
-    startDestination: NavigationRoute
+    startDestination: Any
 ) {
     NavHost(
         navController = navHostController,
-        startDestination = startDestination.route
+        startDestination = startDestination
     ) {
-        composable(route = NavigationRoute.Login.route) {
+        composable<Login> {
             LoginScreen(
                 onLoginSuccess = {
-                    navHostController.navigate(NavigationRoute.Video.route)
+                    navHostController.navigate(Video)
                 }
             )
         }
-        composable(route = NavigationRoute.Video.route) {
+        composable<Video> {
             VideoScreen(
                 onclickVideo = { id ->
-                    navHostController.navigate("${NavigationRoute.Detail.route}?id=${id}")
+                    navHostController.navigate(Detail(id))
                 }
             )
         }
-        composable(
-            route = "${NavigationRoute.Detail.route}?id={id}",
-            arguments = listOf(
-                navArgument(name = "id") {
-                    type = NavType.StringType
-                    nullable = true
-                    defaultValue = ""
-                }
-            )
-        ) {
+        composable<Detail> {
             DetailScreen(
                 onClickBack = {
                     navHostController.popBackStack()
