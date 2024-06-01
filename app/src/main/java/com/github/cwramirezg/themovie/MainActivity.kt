@@ -7,7 +7,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
 import com.github.cwramirezg.themovie.navigation.Login
 import com.github.cwramirezg.themovie.navigation.NavigationHost
-import com.github.cwramirezg.themovie.ui.theme.TheMovieTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -16,13 +15,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            TheMovieTheme {
-                val navController = rememberNavController()
-                NavigationHost(
-                    navHostController = navController,
-                    startDestination = getStartDestination()
-                )
-            }
+            val navController = rememberNavController()
+            NavigationHost(
+                navHostController = navController,
+                startDestination = getStartDestination()
+            )
         }
     }
 

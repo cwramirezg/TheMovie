@@ -78,7 +78,7 @@ dependencies {
     implementation(libs.androidx.paging.compose)
 
     implementation(libs.retrofit)
-    implementation(libs.retrofit2.kotlinx.serialization.converter)
+    implementation(libs.retrofit.converter.kotlinx.serialization)
     implementation(libs.logging.interceptor)
 
     implementation(libs.coil.compose)

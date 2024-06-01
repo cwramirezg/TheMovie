@@ -20,6 +20,8 @@ class VideoViewModel @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
+    val videos = videoUseCases.getVideosByPage().cachedIn(viewModelScope)
+
     init {
         Timber.d("VideoViewModel created!")
     }

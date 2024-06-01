@@ -4,17 +4,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -36,6 +33,7 @@ import com.github.cwramirezg.misrecetas.home.ui.components.TopAppBarView
 import com.github.cwramirezg.themovie.R
 import com.github.cwramirezg.themovie.home.domain.model.Video
 import com.github.cwramirezg.themovie.home.domain.model.url200
+import com.github.cwramirezg.themovie.ui.theme.TheMovieTheme
 import timber.log.Timber
 
 @Composable
@@ -43,93 +41,124 @@ fun VideoScreen(
     viewModel: VideoViewModel = hiltViewModel(),
     onclickVideo: (String) -> Unit
 ) {
-    val videos = viewModel.getVideo().collectAsLazyPagingItems()
-
     Timber.d("Videosscreen")
 
-    Scaffold(
-        topBar = {
-            TopAppBarView(
-                textTitle = "Videos",
-                onClickHome = { },
-                imageVectorHome = Icons.Default.Home
-            )
-        }
-    ) { padding ->
-        Timber.d("Videos: ${videos.itemCount}")
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(180.dp),
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-            contentPadding = PaddingValues(4.dp)
+    val videos = viewModel.videos.collectAsLazyPagingItems()
+
+    TheMovieTheme {
+        Surface(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            items(videos.itemCount) { index ->
-                videos[index]?.also {
-                    VideoItem(
-                        video = it,
-                        onClick = {
-                            onclickVideo(it)
-                        }
+            Timber.d("TheMovieTheme")
+            Scaffold(
+                topBar = {
+                    TopAppBarView(
+                        textTitle = "Videos",
+                        onClickHome = { },
+                        imageVectorHome = Icons.Default.Home
                     )
                 }
-            }
-            when (val state = videos.loadState.refresh) {
-                is LoadState.Error -> {
-                    Timber.d("Error refresh")
-                    item {
-                        Text(text = state.error.message.toString())
-                    }
-                }
-
-                LoadState.Loading -> {
-                    item {
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center,
-                        ) {
-                            Text(
-                                modifier = Modifier
-                                    .padding(8.dp),
-                                text = "Refresh Loading"
-                            )
-                            CircularProgressIndicator()
+            ) { padding ->
+                Timber.d("Videos: ${videos.itemCount}")
+                LazyColumn(
+                    modifier = Modifier.padding(padding)
+                ) {
+                    items(videos.itemCount) { index ->
+                        videos[index]?.let { quote ->
+                            VideoItem(video = quote) {
+                                onclickVideo(it)
+                            }
                         }
                     }
-                }
-
-                is LoadState.NotLoading -> {}
-            }
-            when (val state = videos.loadState.append) {
-                is LoadState.Error -> {
-                    Timber.d("Error append")
-                    item {
-                        Text(text = state.error.message.toString())
-                    }
-                }
-
-                LoadState.Loading -> {
-                    item {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center,
-                        ) {
-                            Text(text = "Pagination Loading")
-
-                            CircularProgressIndicator()
+                    when (val state = videos.loadState.refresh) {
+                        is LoadState.Error -> {
+                            Timber.d("Error refresh")
+                            item {
+                                Text(text = state.error.message.toString())
+                            }
                         }
+
+                        LoadState.Loading -> {
+                            item {
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center,
+                                ) {
+                                    Text(
+                                        modifier = Modifier
+                                            .padding(8.dp),
+                                        text = "Refresh Loading"
+                                    )
+                                    CircularProgressIndicator()
+                                }
+                            }
+                        }
+
+                        is LoadState.NotLoading -> {}
+                    }
+                    when (val state = videos.loadState.append) {
+                        is LoadState.Error -> {
+                            Timber.d("Error append")
+                            item {
+                                Text(text = state.error.message.toString())
+                            }
+                        }
+
+                        LoadState.Loading -> {
+                            item {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center,
+                                ) {
+                                    Text(text = "Pagination Loading")
+
+                                    CircularProgressIndicator()
+                                }
+                            }
+                        }
+
+                        is LoadState.NotLoading -> {}
                     }
                 }
-
-                is LoadState.NotLoading -> {}
             }
         }
     }
+
+    /* Scaffold(
+         topBar = {
+             TopAppBarView(
+                 textTitle = "Videos",
+                 onClickHome = { },
+                 imageVectorHome = Icons.Default.Home
+             )
+         }
+     ) { padding ->
+         Timber.d("Videos: ${videos.itemCount}")
+         LazyVerticalGrid(
+             columns = GridCells.Adaptive(180.dp),
+             modifier = Modifier
+                 .padding(padding)
+                 .fillMaxWidth(),
+             horizontalArrangement = Arrangement.spacedBy(4.dp),
+             verticalArrangement = Arrangement.spacedBy(4.dp),
+             contentPadding = PaddingValues(4.dp)
+         ) {
+             items(videos.itemCount) { index ->
+                 videos[index]?.also {
+                     VideoItem(
+                         video = it,
+                         onClick = {
+                             onclickVideo(it)
+                         }
+                     )
+                 }
+             }
+
+         }
+     }*/
 }
 
 @Composable
