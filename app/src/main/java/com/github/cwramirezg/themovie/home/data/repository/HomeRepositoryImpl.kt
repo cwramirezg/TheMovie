@@ -18,14 +18,15 @@ import timber.log.Timber
 class HomeRepositoryImpl(
     private val dao: HomeDao,
     private val api: HomeApi,
-    private val connectivityManager: ConnectivityManager
+    private val connectivityManager: ConnectivityManager,
+    private val apiKey: String
 ) : HomeRepository {
     override fun getAllVideos(): Flow<List<Video>> {
         return dao.getAllVideos().map { videos -> videos.map { it.toDomain() } }
     }
 
     override suspend fun getVideos(): List<Video> {
-        return api.getVideos(1).toDomain()
+        return api.getVideos(1, "").toDomain()
     }
 
     override suspend fun insertVideos(videos: List<Video>) {
@@ -44,7 +45,7 @@ class HomeRepositoryImpl(
         Timber.d("getVideosByPage")
         return Pager(
             config = PagingConfig(pageSize = 20),
-            pagingSourceFactory = { VideosPagingSource(dao, api, isNetworkAvailable()) }
+            pagingSourceFactory = { VideosPagingSource(dao, api, isNetworkAvailable(), apiKey) }
         ).flow
     }
 
@@ -53,4 +54,5 @@ class HomeRepositoryImpl(
         val activeNetworkInfo = connectivityManager.activeNetworkInfo
         return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
+
 }

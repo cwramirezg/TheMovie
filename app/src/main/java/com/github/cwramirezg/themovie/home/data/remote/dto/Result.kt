@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Result(
     @SerialName("adult") val adult: Boolean,
-    @SerialName("backdrop_path") val backdrop_path: String,
+    @SerialName("backdrop_path") val backdrop_path: String?,
     @SerialName("genre_ids") val genre_ids: List<Int>,
     @SerialName("id") val id: Int,
     @SerialName("original_language") val original_language: String,

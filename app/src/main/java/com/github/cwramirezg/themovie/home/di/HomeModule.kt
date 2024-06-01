@@ -3,6 +3,7 @@ package com.github.cwramirezg.themovie.home.di
 import android.content.Context
 import android.net.ConnectivityManager
 import androidx.room.Room
+import com.github.cwramirezg.themovie.BuildConfig
 import com.github.cwramirezg.themovie.home.data.local.HomeDao
 import com.github.cwramirezg.themovie.home.data.local.HomeDatabase
 import com.github.cwramirezg.themovie.home.data.remote.HomeApi
@@ -26,6 +27,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -93,17 +95,24 @@ object HomeModule {
         ).build().dao
     }
 
+    @Provides
+    @Singleton
+    @Named("apiKey")
+    fun provideApiKey() = BuildConfig.TMDB_API_KEY
+
     @Singleton
     @Provides
     fun provideHomeRepository(
         dao: HomeDao,
         api: HomeApi,
-        connectivityManager: ConnectivityManager
+        connectivityManager: ConnectivityManager,
+        @Named("apiKey") apiKey: String
     ): HomeRepository {
         return HomeRepositoryImpl(
             dao = dao,
             api = api,
-            connectivityManager = connectivityManager
+            connectivityManager = connectivityManager,
+            apiKey = apiKey
         )
     }
 

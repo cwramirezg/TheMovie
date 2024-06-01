@@ -12,7 +12,8 @@ import kotlinx.coroutines.withContext
 class VideosPagingSource(
     private val dao: HomeDao,
     private val api: HomeApi,
-    private val isConnected: Boolean
+    private val isConnected: Boolean,
+    private val apiKey: String
 ) : PagingSource<Int, Video>() {
     override fun getRefreshKey(state: PagingState<Int, Video>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
@@ -34,7 +35,7 @@ class VideosPagingSource(
                 }
             } else {
                 val page = params.key ?: 1
-                val videosDto = api.getVideos(page)
+                val videosDto = api.getVideos(page, apiKey)
                 val videosDomain = videosDto.toDomain()
                 val videosEntity = videosDto.toLocal()
                 withContext(Dispatchers.IO) {

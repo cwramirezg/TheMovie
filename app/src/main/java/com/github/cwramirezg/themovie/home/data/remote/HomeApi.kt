@@ -12,7 +12,7 @@ interface HomeApi {
     @GET("/3/movie/upcoming")
     suspend fun getVideos(
         @Query("page") page: Int,
-        @Query("api_key") language: String = "aab779e3d79fd88afd1de96ec6fe7383"
+        @Query("api_key") apiKey: String
     ): VideoResponse
 
 }
