@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.google.dagger.hilt.android)
     alias(libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.jetbrains.kotlin.compose)
 }
 
 android {
@@ -28,8 +29,8 @@ android {
         val properties = Properties()
         properties.load(project.rootProject.file("local.properties").readText().byteInputStream())
 
-        val tmdbApiKey = properties.getProperty("TMDB_API_KEY","")
-        buildConfigField("String","TMDB_API_KEY","\"$tmdbApiKey\"")
+        val tmdbApiKey = properties.getProperty("TMDB_API_KEY", "")
+        buildConfigField("String", "TMDB_API_KEY", "\"$tmdbApiKey\"")
     }
 
     buildTypes {
@@ -52,8 +53,8 @@ android {
         buildConfig = true
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.13"
+    composeCompiler {
+        enableStrongSkippingMode = true
     }
     packaging {
         resources {
