@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.google.dagger.hilt.android)
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.jetbrains.kotlin.compose)
+    alias(libs.plugins.app.cash.paparazzi)
 }
 
 android {
@@ -52,9 +53,6 @@ android {
     buildFeatures {
         buildConfig = true
         compose = true
-    }
-    composeCompiler {
-        enableStrongSkippingMode = true
     }
     packaging {
         resources {
