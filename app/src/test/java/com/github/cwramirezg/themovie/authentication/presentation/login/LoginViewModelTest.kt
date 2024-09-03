@@ -13,6 +13,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verifyBlocking
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class LoginViewModelTest {
 
     private lateinit var loginViewModel: LoginViewModel
@@ -20,7 +21,7 @@ class LoginViewModelTest {
     private val dispatcher = StandardTestDispatcher()
     private val scope = TestScope(dispatcher)
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+
     @Test
     fun `Si el user y pass son correctos, se debe navegar a la pantalla principal`() =
         scope.runTest {
@@ -36,5 +37,23 @@ class LoginViewModelTest {
             verifyBlocking(getLoginUseCase) { invoke("Admin", "Password") }
             val state = loginViewModel.state.value
             assertEquals(true, state.onLoginSuccess)
+        }
+
+    @Test
+    fun `Si el user y pass son incorrectos, se muestra un error`() =
+        scope.runTest {
+            val getLoginUseCase = mock<GetLoginUseCase> {
+                onBlocking { invoke("Admin", "Password") } doReturn false
+            }
+            val loginUseCases = LoginUseCases(getLoginUseCase)
+            loginViewModel = LoginViewModel(loginUseCases, dispatcher)
+            loginViewModel.onEvent(LoginEvent.updateUsername(username = "Admin"))
+            loginViewModel.onEvent(LoginEvent.updatePassword(password = "Password"))
+            loginViewModel.onEvent(LoginEvent.onLogin)
+            advanceUntilIdle()
+            verifyBlocking(getLoginUseCase) { invoke("Admin", "Password") }
+            val state = loginViewModel.state.value
+            assertEquals(false, state.onLoginSuccess)
+            assertEquals("Login failed", state.error)
         }
 }

@@ -19,7 +19,7 @@ bibliotecas importantes para proporcionar una experiencia robusta y escalable.
 - Jetpack Compose: La interfaz de usuario se desarrolla utilizando Jetpack Compose, el moderno
   toolkit de UI de Android que facilita la creación de interfaces de usuario flexibles y dinámicas.
 - Room: Se utiliza Room, la biblioteca de persistencia de Android, para almacenar los datos de las
-  recetas en una base de datos local y permitir un acceso rápido y eficiente a ellos.
+  peliculas en una base de datos local y permitir un acceso rápido y eficiente a ellos.
 - Retrofit: Se utiliza Retrofit para realizar las llamadas a una API remota y obtener datos
   relacionados con las recetas, lo que permite una sincronización eficiente y actualizada de la
   información.

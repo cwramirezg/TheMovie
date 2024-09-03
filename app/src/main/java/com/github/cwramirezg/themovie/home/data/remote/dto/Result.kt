@@ -13,7 +13,7 @@ data class Result(
     @SerialName("original_title") val original_title: String,
     @SerialName("overview") val overview: String,
     @SerialName("popularity") val popularity: Double,
-    @SerialName("poster_path") val poster_path: String,
+    @SerialName("poster_path") val poster_path: String?,
     @SerialName("release_date") val release_date: String,
     @SerialName("title") val title: String,
     @SerialName("video") val video: Boolean,

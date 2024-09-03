@@ -8,7 +8,7 @@ import com.github.cwramirezg.themovie.home.domain.model.Video
 fun Result.toDomain(): Video {
     return Video(
         id = id.toString(),
-        poster = poster_path,
+        poster = poster_path ?: "",
         nombre = title,
         nota = vote_average.toString(),
         fechaLanzamiento = release_date,
@@ -23,7 +23,7 @@ fun VideoResponse.toDomain(): List<Video> {
 fun Result.toLocal(): VideoEntity {
     return VideoEntity(
         id = id.toString(),
-        poster = poster_path,
+        poster = poster_path ?: "",
         nombre = title,
         nota = vote_average.toString(),
         fechaLanzamiento = release_date,
