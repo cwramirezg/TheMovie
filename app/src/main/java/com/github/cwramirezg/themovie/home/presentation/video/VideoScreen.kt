@@ -127,38 +127,6 @@ fun VideoScreen(
         }
     }
 
-    /* Scaffold(
-         topBar = {
-             TopAppBarView(
-                 textTitle = "Videos",
-                 onClickHome = { },
-                 imageVectorHome = Icons.Default.Home
-             )
-         }
-     ) { padding ->
-         Timber.d("Videos: ${videos.itemCount}")
-         LazyVerticalGrid(
-             columns = GridCells.Adaptive(180.dp),
-             modifier = Modifier
-                 .padding(padding)
-                 .fillMaxWidth(),
-             horizontalArrangement = Arrangement.spacedBy(4.dp),
-             verticalArrangement = Arrangement.spacedBy(4.dp),
-             contentPadding = PaddingValues(4.dp)
-         ) {
-             items(videos.itemCount) { index ->
-                 videos[index]?.also {
-                     VideoItem(
-                         video = it,
-                         onClick = {
-                             onclickVideo(it)
-                         }
-                     )
-                 }
-             }
-
-         }
-     }*/
 }
 
 @Composable

@@ -23,8 +23,7 @@ fun PasswordOutlineTextField(
     modifier: Modifier = Modifier
 ) {
     val showPassword = rememberSaveable { mutableStateOf(false) }
-    val passwordPattern =
-        Pattern.compile("^[a-zA-Z0-9.*]+\$")
+    val passwordPattern = Pattern.compile("^[a-zA-Z0-9.*]+\$")
 
     OutlinedTextField(
         value = value,
@@ -65,7 +64,7 @@ fun PasswordOutlineTextField(
     )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun PasswordOutlineTextFieldPreview() {
     PasswordOutlineTextField(

@@ -10,8 +10,6 @@ interface HomeRepository {
     suspend fun insertVideos(videos: List<Video>)
     suspend fun getVideoById(id: String): Video
     suspend fun countVideos(): Int
-
     fun getVideosByPage(): Flow<PagingData<Video>>
-
     fun isNetworkAvailable(): Boolean
 }

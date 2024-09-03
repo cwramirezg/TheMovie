@@ -27,7 +27,7 @@ fun UsernameOutlineTextField(
     )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun UsernameOutlineTextFieldPreview() {
     UsernameOutlineTextField(

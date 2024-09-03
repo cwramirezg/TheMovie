@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
@@ -85,13 +86,23 @@ fun MyVideo(
             text = video.nombre,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
+            fontSize = 20.sp,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
+        )
+        Text(
+            text = "(${video.fechaLanzamiento} - ${video.nota})",
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Light,
+            fontSize = 10.sp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp)
         )
         Text(
             text = video.resumen,
             fontWeight = FontWeight.Normal,
+            fontSize = 16.sp,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
