@@ -12,7 +12,7 @@ plugins {
 
 android {
     namespace = "com.github.cwramirezg.themovie"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.github.cwramirezg.themovie"

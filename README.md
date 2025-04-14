@@ -30,6 +30,6 @@ bibliotecas importantes para proporcionar una experiencia robusta y escalable.
 ## Adicionales
 
 - Es compatible con JDK 17.
-- Es compatible con Android Studio Koala
+- Es compatible con Android Studio Meerkat
 - En archivo local.properties se agrega una linea para la clave de themoviedb:
   TMDB_API_KEY=############
